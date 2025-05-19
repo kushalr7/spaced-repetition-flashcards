@@ -28,15 +28,34 @@ export const FlashcardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   useEffect(() => {
     const savedData = localStorage.getItem(STORAGE_KEY);
     
+    // Always use the latest sample cards from the code
+    // This ensures new deployments with updated cards are reflected
+    setFlashcards(sampleCards);
+    
     if (savedData) {
-      const { flashcards, cardStatus, reviewHistory, stats } = JSON.parse(savedData);
-      setFlashcards(flashcards);
-      setCardStatus(cardStatus);
+      const { cardStatus, reviewHistory, stats } = JSON.parse(savedData);
+      // Re-use existing card status for any matching card IDs
+      // Create default status for any new cards from sample data
+      const updatedCardStatus = sampleCards.map(card => {
+        const existingStatus = cardStatus.find((status: CardStatus) => status.cardId === card.id);
+        if (existingStatus) {
+          return existingStatus;
+        }
+        return {
+          cardId: card.id,
+          known: false,
+          dueDate: Date.now(),
+          easeFactor: 2.5,
+          reviewCount: 0,
+          consecutiveCorrect: 0
+        };
+      });
+      
+      setCardStatus(updatedCardStatus);
       setReviewHistory(reviewHistory);
       setStats(stats);
     } else {
-      // Initialize with sample cards if no saved data
-      setFlashcards(sampleCards);
+      // Initialize with default status for all sample cards if no saved data
       setCardStatus(sampleCards.map(card => ({
         cardId: card.id,
         known: false,
@@ -156,30 +175,15 @@ export const FlashcardProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   };
 
   const goToNextCard = () => {
-    // Find cards that are due for review
-    const now = Date.now();
-    const dueCards = cardStatus
-      .filter(status => status.dueDate <= now)
-      .map(status => status.cardId);
-    
-    if (dueCards.length > 0) {
-      // Find cards that are due for review
-      const dueCardIndices = flashcards
-        .map((card, index) => ({ index, card }))
-        .filter(item => dueCards.includes(item.card.id))
-        .map(item => item.index);
-      
-      if (dueCardIndices.length > 0) {
-        // Move to the next due card
-        const nextIndex = dueCardIndices[0];
-        setCurrentCardIndex(nextIndex);
-        return;
-      }
-    }
-    
-    // If no due cards, just go to the next card
+    // Always move to the next card when requested
+    // This ensures cards are shown in sequence during a review session
     const nextIndex = (currentCardIndex + 1) % flashcards.length;
     setCurrentCardIndex(nextIndex);
+    
+    // Note: We've simplified this function to always show cards in sequence
+    // This ensures you don't get stuck on the same card repeatedly
+    // The spaced repetition algorithm still works in the background
+    // to track which cards you know and don't know
   };
 
   return (
