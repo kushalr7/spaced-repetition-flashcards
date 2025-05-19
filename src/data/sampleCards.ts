@@ -1,3 +1,4 @@
+// filepath: /Users/kusratho/Documents/Playground/Learning/spaced-repetition-flashcards/src/data/sampleCards.ts
 import { v4 as uuidv4 } from 'uuid';
 import { Flashcard } from '../types';
 
@@ -11,8 +12,8 @@ const createCard = (front: string, back: string): Flashcard => ({
 
 export const sampleCards: Flashcard[] = [
   createCard(
-    "What is the capital of France?",
-    "Paris"
+    "What fruit is known as the 'king of fruits' in Southeast Asia?",
+    "Durian"
   ),
   createCard(
     "What is the largest planet in our solar system?",
