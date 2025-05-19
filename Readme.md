@@ -1,92 +1,103 @@
-# README.md
+# MemoryMaster: Spaced Repetition Flashcard App
 
-# Spaced Repetition Flashcard Engine
+<div align="center">
+  <h3>Remember more. Study less.</h3>
+</div>
 
-This project is a Spaced Repetition Flashcard Engine built with React, utilizing TailwindCSS for styling and Recharts for visualizing review statistics. The application is designed to help users learn and retain information effectively through spaced repetition techniques.
+MemoryMaster is an elegant spaced repetition flashcard application designed to optimize your learning experience. Built with React, TypeScript, and Vite, the app uses scientifically-proven spaced repetition techniques to help you retain information more efficiently.
 
-## Features
+## ✨ Features
 
-- **Flashcard Component**: Displays flashcard content with a flip animation.
-- **Know / Don’t Know Buttons**: Allows users to indicate their familiarity with the flashcard content.
-- **Spaced Repetition Logic**: Implements a custom algorithm to schedule flashcards based on user performance.
-- **Review Stats Dashboard**: Visualizes user performance and learning progress with graphs.
-- **Persistent Storage**: Utilizes localStorage to save and retrieve flashcard data.
+- **Beautiful Interactive Flashcards** - Smooth flip animations and a clean UI
+- **Smart Spaced Repetition Algorithm** - Based on the proven SM-2 algorithm
+- **Adaptive Learning Schedule** - Cards you know well appear less frequently 
+- **Comprehensive Dashboard** - Track your progress with visual analytics
+- **Responsive Design** - Works on desktop and mobile devices
+- **Offline Functionality** - All data stored locally in your browser
 
-## Project Structure
+## 🚀 Getting Started
 
-```
-spaced-repetition-flashcards
-├── src
-│   ├── components
-│   │   ├── App.tsx
-│   │   ├── Flashcard
-│   │   │   ├── Flashcard.tsx
-│   │   │   ├── FlashcardActions.tsx
-│   │   │   └── FlipAnimation.tsx
-│   │   ├── Dashboard
-│   │   │   ├── Dashboard.tsx
-│   │   │   ├── StatsGraph.tsx
-│   │   │   └── ProgressChart.tsx
-│   │   └── Layout
-│   │       ├── Header.tsx
-│   │       └── Footer.tsx
-│   ├── hooks
-│   │   ├── useSpacedRepetition.ts
-│   │   └── useLocalStorage.ts
-│   ├── utils
-│   │   ├── spacedRepetitionAlgorithm.ts
-│   │   └── dateUtils.ts
-│   ├── types
-│   │   └── index.ts
-│   ├── context
-│   │   └── FlashcardContext.tsx
-│   ├── data
-│   │   └── sampleCards.ts
-│   ├── services
-│   │   └── storageService.ts
-│   ├── index.tsx
-│   └── index.css
-├── public
-│   └── index.html
-├── package.json
-├── tsconfig.json
-├── tailwind.config.js
-├── postcss.config.js
-└── README.md
+### Prerequisites
+- Node.js v14+ and npm
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/kushalr7/spaced-repetition-flashcards.git
+cd spaced-repetition-app
 ```
 
-## Installation
+2. Install dependencies
+```bash
+npm install
+```
 
-1. Clone the repository:
-   ```
-   git clone <repository-url>
-   ```
-2. Navigate to the project directory:
-   ```
-   cd spaced-repetition-flashcards
-   ```
-3. Install dependencies:
-   ```
-   npm install
-   ```
-4. Start the development server:
-   ```
-   npm start
-   ```
+3. Start the development server
+```bash
+npm run dev
+```
 
-## Usage
+4. Open your browser and navigate to `http://localhost:3000`
 
-- Navigate through the flashcards using the "Know" and "Don’t Know" buttons to indicate your familiarity with the content.
-- Review your progress in the dashboard, which displays various statistics and graphs based on your performance.
+## 🧠 How Spaced Repetition Works
 
-## Technologies Used
+The app uses a modified version of the SuperMemo SM-2 algorithm to determine the optimal intervals between card reviews:
 
-- React
-- TypeScript
-- TailwindCSS
-- Recharts
-- LocalStorage
+1. **Review a card** - View the question, try to recall the answer
+2. **Rate your recall** - Mark the card as "Known" or "Still Learning"
+3. **Smart scheduling** - The algorithm schedules the next review based on your performance
+4. **Efficient learning** - Cards you know well appear less frequently, while challenging cards show up more often
 
-## License
+## 🛠️ Technology Stack
 
-This project is licensed under the MIT License.
+- **Frontend**: React, TypeScript
+- **Styling**: TailwindCSS
+- **Build Tool**: Vite
+- **State Management**: React Context API
+- **Animations**: Framer Motion
+- **Charts**: Recharts
+- **Storage**: LocalStorage
+
+## 📊 Project Structure
+
+```
+spaced-repetition-app/
+├── src/
+│   ├── components/           # UI components
+│   │   ├── Flashcard/        # Flashcard-related components
+│   │   ├── Dashboard/        # Analytics and statistics
+│   │   ├── Review/           # Review session components
+│   │   └── Layout/           # App layout components
+│   ├── context/              # React context providers
+│   ├── hooks/                # Custom React hooks
+│   ├── utils/                # Utility and algorithm functions
+│   ├── types/                # TypeScript type definitions
+│   ├── services/             # Storage and API services
+│   └── data/                 # Sample data
+└── public/                   # Static assets
+```
+
+## 🔮 Future Enhancements
+
+- User accounts and cloud synchronization
+- Customizable card categories and tags
+- Import/export functionality
+- Mobile application
+- Timed practice sessions
+- Gamification features
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🔗 Links
+
+- [GitHub Repository](https://github.com/kushalr7/spaced-repetition-flashcards)
+- [X/Twitter](https://x.com/kushal_r7)
+
+---
+
+<div align="center">
+  © 2023 MemoryMaster. Built with 💙 by Kushal R.
+</div>
