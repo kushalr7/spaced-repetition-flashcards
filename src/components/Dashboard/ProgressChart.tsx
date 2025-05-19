@@ -6,7 +6,8 @@ import {
   Cell, 
   Legend, 
   Tooltip,
-  Sector
+  Sector,
+  Text
 } from 'recharts';
 
 interface ProgressChartProps {
@@ -26,6 +27,10 @@ const renderActiveShape = (props: any) => {
     cx, cy, innerRadius, outerRadius, startAngle, endAngle,
     fill, payload, value, percent
   } = props;
+
+  // Handle NaN or undefined percent value
+  const percentValue = isNaN(percent) ? 0 : percent;
+  const percentDisplay = `${(percentValue * 100).toFixed(0)}%`;
 
   return (
     <g>
@@ -56,6 +61,7 @@ const renderActiveShape = (props: any) => {
         textAnchor="middle" 
         fill={fill}
         className="font-medium"
+        style={{ fontSize: '14px' }}
       >
         {payload.name}
       </text>
@@ -65,9 +71,10 @@ const renderActiveShape = (props: any) => {
         dy={8} 
         textAnchor="middle" 
         fill="#374151"
-        className="font-bold text-lg"
+        className="font-bold"
+        style={{ fontSize: '16px' }}
       >
-        {`${(percent * 100).toFixed(0)}%`}
+        {percentDisplay}
       </text>
     </g>
   );
@@ -76,6 +83,19 @@ const renderActiveShape = (props: any) => {
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0];
+    
+    // Calculate percentage safely to avoid NaN
+    const total = data.payload.total || 1; // Prevent division by zero
+    let percentageValue = 0;
+    
+    if (data.payload.percent && !isNaN(data.payload.percent)) {
+      percentageValue = data.payload.percent * 100;
+    } else if (total > 0) {
+      percentageValue = (data.value / total) * 100;
+    }
+    
+    // Format percentage for display
+    const percentageDisplay = percentageValue.toFixed(1);
     
     return (
       <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-100">
@@ -88,7 +108,7 @@ const CustomTooltip = ({ active, payload }: any) => {
         </div>
         <div className="mt-1.5">
           <span className="text-sm text-gray-700">{data.value} cards</span>
-          <span className="text-sm text-gray-500 ml-2">({(data.payload.percent * 100).toFixed(1)}%)</span>
+          <span className="text-sm text-gray-500 ml-2">({percentageDisplay}%)</span>
         </div>
       </div>
     );
@@ -98,11 +118,13 @@ const CustomTooltip = ({ active, payload }: any) => {
 
 const ProgressChart: React.FC<ProgressChartProps> = ({ 
   total, 
-  mastered, 
+  mastered,
   learning, 
   due 
 }) => {
   const [activeIndex, setActiveIndex] = React.useState(0);
+  
+  // Handle mouse enter events on pie slices
   const onPieEnter = (data: any, index: number) => setActiveIndex(index);
 
   // If there are no cards, show empty state
@@ -118,10 +140,12 @@ const ProgressChart: React.FC<ProgressChartProps> = ({
     );
   }
 
+  // Add total to each data point for accurate percentage calculation
+  const totalCards = Math.max(1, total); // Prevent division by zero by using at least 1
   const data = [
-    { name: 'Mastered', value: mastered, fill: COLORS[0] },
-    { name: 'Learning', value: learning, fill: COLORS[1] },
-    { name: 'Due for Review', value: due, fill: COLORS[2] }
+    { name: 'Mastered', value: mastered, fill: COLORS[0], total: totalCards },
+    { name: 'Learning', value: learning, fill: COLORS[1], total: totalCards },
+    { name: 'Due for Review', value: due, fill: COLORS[2], total: totalCards }
   ].filter(item => item.value > 0); // Only include non-zero segments
   
   // Custom label that shows percentage
@@ -142,7 +166,11 @@ const ProgressChart: React.FC<ProgressChartProps> = ({
     percent: number; 
     index: number; 
   }) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.7;
+    // Handle NaN percent value
+    if (isNaN(percent) || percent < 0.05) return null;
+    
+    // Use a more conservative radius to ensure text stays within bounds
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.6;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
@@ -159,6 +187,26 @@ const ProgressChart: React.FC<ProgressChartProps> = ({
       </text>
     );
   };
+
+  // Handle the case when no segments are available (all values are 0)
+  if (data.length === 0) {
+    return (
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <text 
+            x="50%" 
+            y="50%" 
+            textAnchor="middle" 
+            dominantBaseline="middle"
+            fill="#6b7280"
+            className="text-base font-medium"
+          >
+            No card data to display
+          </text>
+        </PieChart>
+      </ResponsiveContainer>
+    );
+  }
 
   return (
     <ResponsiveContainer width="100%" height="100%">
@@ -191,7 +239,7 @@ const ProgressChart: React.FC<ProgressChartProps> = ({
           cy="50%"
           labelLine={false}
           label={renderCustomizedLabel}
-          outerRadius={90}
+          outerRadius={80} // Reduced slightly to ensure text stays within container
           innerRadius={40}
           fill="#8884d8"
           dataKey="value"
