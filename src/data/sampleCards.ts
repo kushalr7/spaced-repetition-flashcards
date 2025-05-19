@@ -39,8 +39,8 @@ export const sampleCards: Flashcard[] = [
     "object"
   ),
   createCard(
-    "What is React's virtual DOM?",
-    "A programming concept where a virtual representation of a UI is kept in memory and synced with the real DOM via a process called reconciliation"
+    "What React hook manages state in functional components?",
+    "useState"
   ),
   createCard(
     "What does CSS stand for?",

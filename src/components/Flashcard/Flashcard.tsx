@@ -17,15 +17,11 @@ const Flashcard: React.FC<FlashcardProps> = ({ card }) => {
   } = useFlashcardContext();
 
   const handleKnow = () => {
-    if (isFlipped) {
-      reviewCard(card.id, true);
-    }
+    reviewCard(card.id, true);
   };
 
   const handleDontKnow = () => {
-    if (isFlipped) {
-      reviewCard(card.id, false);
-    }
+    reviewCard(card.id, false);
   };
 
   return (
@@ -80,7 +76,7 @@ const Flashcard: React.FC<FlashcardProps> = ({ card }) => {
           onFlip={flipCard}
           onKnow={handleKnow}
           onDontKnow={handleDontKnow}
-          canAnswer={isFlipped}
+          canAnswer={isFlipped} // Only allow answering when card is flipped
         />
 
         <motion.div 

@@ -16,6 +16,19 @@ const FlashcardActions: React.FC<FlashcardActionsProps> = ({
   isFlipped,
   canAnswer = true 
 }) => {
+  // Simple handlers that only work when the card is flipped (showing answer)
+  const handleKnow = () => {
+    if (isFlipped) {
+      onKnow(); // Only allow when card is flipped showing the answer
+    }
+  };
+
+  const handleDontKnow = () => {
+    if (isFlipped) {
+      onDontKnow(); // Only allow when card is flipped showing the answer
+    }
+  };
+
   return (
     <div className="mt-10">
       {/* Flip button */}
@@ -46,14 +59,14 @@ const FlashcardActions: React.FC<FlashcardActionsProps> = ({
         </motion.button>
       </div>
       
-      {/* Know/Don't Know buttons */}
+      {/* Know/Don't Know buttons - Only enabled when card is flipped */}
       <div className="grid grid-cols-2 gap-6">
         <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          className={`btn btn-success relative overflow-hidden group ${!canAnswer && 'opacity-60 cursor-not-allowed'}`}
-          onClick={onKnow}
-          disabled={!canAnswer}
+          whileHover={isFlipped ? { scale: 1.03 } : undefined}
+          whileTap={isFlipped ? { scale: 0.97 } : undefined}
+          className={`btn btn-success relative overflow-hidden group ${!isFlipped ? 'opacity-60 cursor-not-allowed' : ''}`}
+          onClick={handleKnow}
+          disabled={!isFlipped}
         >
           <div className="absolute inset-0 w-full h-full bg-white/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
           <div className="flex items-center justify-center relative z-10">
@@ -65,11 +78,11 @@ const FlashcardActions: React.FC<FlashcardActionsProps> = ({
         </motion.button>
         
         <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          className={`btn btn-danger relative overflow-hidden group ${!canAnswer && 'opacity-60 cursor-not-allowed'}`}
-          onClick={onDontKnow}
-          disabled={!canAnswer}
+          whileHover={isFlipped ? { scale: 1.03 } : undefined}
+          whileTap={isFlipped ? { scale: 0.97 } : undefined}
+          className={`btn btn-danger relative overflow-hidden group ${!isFlipped ? 'opacity-60 cursor-not-allowed' : ''}`}
+          onClick={handleDontKnow}
+          disabled={!isFlipped}
         >
           <div className="absolute inset-0 w-full h-full bg-white/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
           <div className="flex items-center justify-center relative z-10">
