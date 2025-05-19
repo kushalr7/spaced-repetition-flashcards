@@ -29,6 +29,19 @@ const FlashcardActions: React.FC<FlashcardActionsProps> = ({
     }
   };
 
+  // Simple handlers that only work when the card is flipped (showing answer)
+  const handleKnow = () => {
+    if (isFlipped) {
+      onKnow(); // Only allow when card is flipped showing the answer
+    }
+  };
+
+  const handleDontKnow = () => {
+    if (isFlipped) {
+      onDontKnow(); // Only allow when card is flipped showing the answer
+    }
+  };
+
   return (
     <div className="mt-10">
       {/* Flip button */}
@@ -60,8 +73,14 @@ const FlashcardActions: React.FC<FlashcardActionsProps> = ({
       </div>
       
       {/* Know/Don't Know buttons - Only enabled when card is flipped */}
+      {/* Know/Don't Know buttons - Only enabled when card is flipped */}
       <div className="grid grid-cols-2 gap-6">
         <motion.button
+          whileHover={isFlipped ? { scale: 1.03 } : undefined}
+          whileTap={isFlipped ? { scale: 0.97 } : undefined}
+          className={`btn btn-success relative overflow-hidden group ${!isFlipped ? 'opacity-60 cursor-not-allowed' : ''}`}
+          onClick={handleKnow}
+          disabled={!isFlipped}
           whileHover={isFlipped ? { scale: 1.03 } : undefined}
           whileTap={isFlipped ? { scale: 0.97 } : undefined}
           className={`btn btn-success relative overflow-hidden group ${!isFlipped ? 'opacity-60 cursor-not-allowed' : ''}`}
@@ -78,6 +97,11 @@ const FlashcardActions: React.FC<FlashcardActionsProps> = ({
         </motion.button>
         
         <motion.button
+          whileHover={isFlipped ? { scale: 1.03 } : undefined}
+          whileTap={isFlipped ? { scale: 0.97 } : undefined}
+          className={`btn btn-danger relative overflow-hidden group ${!isFlipped ? 'opacity-60 cursor-not-allowed' : ''}`}
+          onClick={handleDontKnow}
+          disabled={!isFlipped}
           whileHover={isFlipped ? { scale: 1.03 } : undefined}
           whileTap={isFlipped ? { scale: 0.97 } : undefined}
           className={`btn btn-danger relative overflow-hidden group ${!isFlipped ? 'opacity-60 cursor-not-allowed' : ''}`}
