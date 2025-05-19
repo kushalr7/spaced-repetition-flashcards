@@ -16,9 +16,22 @@ const FlashcardActions: React.FC<FlashcardActionsProps> = ({
   isFlipped,
   canAnswer = true 
 }) => {
+
+  const handleKnow = () => {
+    if (isFlipped) {
+      onKnow(); 
+    }
+  };
+
+  const handleDontKnow = () => {
+    if (isFlipped) {
+      onDontKnow(); 
+    }
+  };
+
   return (
     <div className="mt-10">
-      {/* Flip button */}
+
       <div className="flex justify-center mb-6">
         <motion.button
           whileHover={{ scale: 1.03 }}
@@ -46,14 +59,14 @@ const FlashcardActions: React.FC<FlashcardActionsProps> = ({
         </motion.button>
       </div>
       
-      {/* Know/Don't Know buttons */}
+
       <div className="grid grid-cols-2 gap-6">
         <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          className={`btn btn-success relative overflow-hidden group ${!canAnswer && 'opacity-60 cursor-not-allowed'}`}
-          onClick={onKnow}
-          disabled={!canAnswer}
+          whileHover={isFlipped ? { scale: 1.03 } : undefined}
+          whileTap={isFlipped ? { scale: 0.97 } : undefined}
+          className={`btn btn-success relative overflow-hidden group ${!isFlipped ? 'opacity-60 cursor-not-allowed' : ''}`}
+          onClick={handleKnow}
+          disabled={!isFlipped}
         >
           <div className="absolute inset-0 w-full h-full bg-white/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
           <div className="flex items-center justify-center relative z-10">
@@ -65,11 +78,11 @@ const FlashcardActions: React.FC<FlashcardActionsProps> = ({
         </motion.button>
         
         <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.97 }}
-          className={`btn btn-danger relative overflow-hidden group ${!canAnswer && 'opacity-60 cursor-not-allowed'}`}
-          onClick={onDontKnow}
-          disabled={!canAnswer}
+          whileHover={isFlipped ? { scale: 1.03 } : undefined}
+          whileTap={isFlipped ? { scale: 0.97 } : undefined}
+          className={`btn btn-danger relative overflow-hidden group ${!isFlipped ? 'opacity-60 cursor-not-allowed' : ''}`}
+          onClick={handleDontKnow}
+          disabled={!isFlipped}
         >
           <div className="absolute inset-0 w-full h-full bg-white/10 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
           <div className="flex items-center justify-center relative z-10">
