@@ -16,6 +16,7 @@ const FlashcardActions: React.FC<FlashcardActionsProps> = ({
   isFlipped,
   canAnswer = true 
 }) => {
+
   // Simple handlers that only work when the card is flipped (showing answer)
   const handleKnow = () => {
     if (isFlipped) {
@@ -59,6 +60,7 @@ const FlashcardActions: React.FC<FlashcardActionsProps> = ({
         </motion.button>
       </div>
       
+      {/* Know/Don't Know buttons - Only enabled when card is flipped */}
       {/* Know/Don't Know buttons - Only enabled when card is flipped */}
       <div className="grid grid-cols-2 gap-6">
         <motion.button
